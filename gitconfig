@@ -1,0 +1,5 @@
+; HTTP
+[http]
+    sslVerify
+[http "https://git.corp.com"]
+    sslVerify = false

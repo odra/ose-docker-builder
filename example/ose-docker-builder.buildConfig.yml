@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: null
+  labels:
+    app: ose-docker-builder
+  name: ose-docker-builder
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: ose-docker-builder:latest
+  postCommit: {}
+  resources: {}
+  source:
+    contextDir: docker-builder
+    git:
+      uri: ssh://git@git.corp.com/openshift3/ose-docker-builder.git
+    secrets: []
+    sourceSecret:
+      name: git-secret
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: redhat-upstream:latest
+    type: Docker
+  triggers:
+  - github:
+      secret: 0wVq_K_JpzRKPRukC0b6
+    type: GitHub
+  - generic:
+      secret: WCph_9nCxIRqstJHiyXr
+    type: Generic
+  - type: ConfigChange
+  - imageChange: {}
+    type: ImageChange
+status:
+  lastVersion: 0
