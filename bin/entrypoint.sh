@@ -2,15 +2,11 @@
 
 set -x
 
-cat /etc/resolv.conf
-cat /etc/hostname
-cat /etc/hosts
-cat /run/secrets/kubernetes.io/serviceaccount/namespace
-
-export HTTP_PROXY=http://proxy.ops.svc.cluster.local:8080
-export HTTPS_PROXY=http://proxy.ops.svc.cluster.local:8080
-export http_proxy=http://proxy.ops.svc.cluster.local:8080
-export https_proxy=http://proxy.ops.svc.cluster.local:8080
+export OPS_NAMESPACE=`grep search /etc/resolv.conf |awk '{sub(".svc","-ops.svc", $2); print $2 }'`
+export HTTP_PROXY="http://proxy.$OPS_NAMESPACE:8080"
+export HTTPS_PROXY=$HTTP_PROXY
+export http_proxy=$HTTP_PROXY
+export https_proxy=$HTTP_PROXY
 #export NO_PROXY
 
 exec /usr/bin/openshift-docker-build "$@"
